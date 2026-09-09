@@ -179,7 +179,8 @@
 <script>
 // ---------- county tiers (2026) ----------
 const TIERS = {"Alamance":2,"Alexander":1,"Alleghany":2,"Anson":1,"Ashe":2,"Avery":2,"Beaufort":2,"Bertie":1,"Bladen":1,"Brunswick":3,"Buncombe":2,"Burke":1,"Cabarrus":3,"Caldwell":1,"Camden":3,"Carteret":3,"Caswell":1,"Catawba":2,"Chatham":3,"Cherokee":2,"Chowan":2,"Clay":2,"Cleveland":1,"Columbus":1,"Craven":2,"Cumberland":1,"Currituck":3,"Dare":2,"Davidson":2,"Davie":3,"Duplin":2,"Durham":3,"Edgecombe":1,"Forsyth":2,"Franklin":2,"Gaston":2,"Gates":2,"Graham":2,"Granville":2,"Greene":1,"Guilford":2,"Halifax":1,"Harnett":2,"Haywood":2,"Henderson":2,"Hertford":1,"Hoke":1,"Hyde":1,"Iredell":3,"Jackson":2,"Johnston":3,"Jones":1,"Lee":2,"Lenoir":1,"Lincoln":3,"Macon":3,"Madison":1,"Martin":1,"McDowell":1,"Mecklenburg":3,"Mitchell":1,"Montgomery":2,"Moore":3,"Nash":1,"New Hanover":3,"Northampton":1,"Onslow":2,"Orange":3,"Pamlico":2,"Pasquotank":1,"Pender":3,"Perquimans":2,"Person":2,"Pitt":1,"Polk":2,"Randolph":2,"Richmond":1,"Robeson":1,"Rockingham":1,"Rowan":2,"Rutherford":1,"Sampson":1,"Scotland":1,"Stanly":3,"Stokes":2,"Surry":2,"Swain":2,"Transylvania":2,"Tyrrell":1,"Union":3,"Vance":1,"Wake":3,"Warren":1,"Washington":1,"Watauga":2,"Wayne":1,"Wilkes":1,"Wilson":1,"Yadkin":2,"Yancey":1};
-function tierOf(c){ if(!c) return 3; const k=c.split('/')[0].trim(); return TIERS[k]||3; }
+const COUNTY_ALIAS={'Sanford':'Lee','Mcdowell':'McDowell'};
+function tierOf(c){ if(!c) return 3; let k=c.split('/')[0].trim(); k=COUNTY_ALIAS[k]||k; return TIERS[k]||3; }
 
 // ---------- classification ----------
 const HOUSE_RE = /(?<!ware)(?<!power)(?<!store)(?<!school)(?<!court)(?<!smoke)(?<!ice)(?<!engine)house|residence|dwelling|\bfarm\b|plantation|chapel|church|cemetery|grist ?mill|gristmill|mill ?pond|\bdam\b/i;
