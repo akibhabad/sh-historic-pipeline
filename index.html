@@ -206,7 +206,7 @@ function storiesOf(desc){
 }
 function eligOf(r){
   const s=r.Status||'', hd=r.HDstatus||'', cnc=(r.CNCstatus||'').trim(), nm=r.Site_Name||'';
-  if(/\(gone\)/i.test(nm)) return null;
+  if(/\(gone\)|\(ruins?\)|\bruins?\b/i.test(nm) || /\bruins?\b|burned|walls stand|collapsed|razed/i.test(r.Descriptio||'')) return null;
   if(['NRD','SLD','SD','DOED'].includes(s) || cnc==='D' || cnc==='N') return null;
   if(s==='NR' || (hd==='NRHD' && cnc==='C')) return 'listed';
   if(['SL','DOE','SLDOE','SLHD','DOEHD'].includes(s)) return 'eligible';
