@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simmons &amp; Harris | Historic Redevelopment Pipeline</title>
+<style>
+  :root { --ink:#1b1b1b; --muted:#666; --line:#ddd; --bg:#fafaf8; --card:#fff; --green:#1d7a3a; --amber:#b26a00; --gray:#777; --blue:#1f4e8c; --red:#a32d2d; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; color:var(--ink); background:var(--bg); }
+  header { padding:14px 20px 10px; border-bottom:1px solid var(--line); background:var(--card); display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; }
+  header h1 { font-size:18px; margin:0; }
+  header .sub { color:var(--muted); }
+  .badge { display:inline-block; padding:2px 8px; border-radius:10px; font-size:12px; border:1px solid var(--line); background:#f2f2ef; color:var(--muted); }
+  .badge.live { color:var(--green); border-color:#bfe0c8; background:#eaf6ee; }
+  .badge.snap { color:var(--amber); border-color:#f0d9a8; background:#fff5e0; }
+  nav.tabs { display:flex; gap:0; padding:0 20px; background:var(--card); border-bottom:1px solid var(--line); }
+  nav.tabs button { border:0; background:none; padding:10px 14px; font-size:14px; cursor:pointer; border-bottom:3px solid transparent; color:var(--muted); }
+  nav.tabs button.on { color:var(--ink); border-bottom-color:var(--blue); font-weight:600; }
+  main { padding:14px 20px 40px; }
+  .panel { display:none; } .panel.on { display:block; }
+  .filters { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:10px 14px; padding:12px 14px; background:var(--card); border:1px solid var(--line); border-radius:6px; margin-bottom:10px; }
+  .filters label { display:flex; flex-direction:column; gap:3px; font-size:12px; color:var(--muted); }
+  .filters input, .filters select { font:inherit; padding:5px 7px; border:1px solid #c9c9c9; border-radius:4px; background:#fff; color:var(--ink); }
+  .filters .chk { flex-direction:row; align-items:center; gap:6px; margin-top:16px; color:var(--ink); }
+  .assump { border-left:3px solid var(--blue); }
+  .bar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:8px 0; flex-wrap:wrap; }
+  .summary { font-size:15px; }
+  .summary b { font-size:17px; }
+  button.act { font:inherit; padding:6px 12px; border:1px solid #bbb; background:#fff; border-radius:4px; cursor:pointer; }
+  button.act:hover { background:#f3f3f3; }
+  .layout { display:grid; grid-template-columns: minmax(0, 1fr) 380px; gap:14px; align-items:start; }
+  @media (max-width: 1000px) { .layout { grid-template-columns: 1fr; } }
+  .tablewrap { overflow-x:auto; background:var(--card); border:1px solid var(--line); border-radius:6px; }
+  table { border-collapse:collapse; width:100%; font-size:13px; }
+  th, td { text-align:left; padding:7px 9px; border-bottom:1px solid #eee; vertical-align:top; }
+  th { background:#f4f4f1; position:sticky; top:0; cursor:pointer; white-space:nowrap; font-weight:600; }
+  tr.row { cursor:pointer; } tr.row:hover { background:#f7f9fc; } tr.row.sel { background:#eaf1fb; }
+  td.num { text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .chip { display:inline-block; padding:1px 7px; border-radius:9px; font-size:11px; white-space:nowrap; border:1px solid; }
+  .chip.listed { color:var(--green); border-color:#bfe0c8; background:#eaf6ee; }
+  .chip.eligible { color:var(--amber); border-color:#f0d9a8; background:#fff5e0; }
+  .chip.confirm { color:var(--gray); border-color:#ddd; background:#f3f3f3; }
+  .chip.mill { color:var(--blue); border-color:#bcd0ea; background:#e9f0fa; }
+  .chip.t1 { color:#fff; background:var(--blue); border-color:var(--blue); }
+  .chip.t2 { color:var(--blue); border-color:#bcd0ea; background:#e9f0fa; }
+  .chip.t3 { color:var(--gray); border-color:#ddd; background:#f3f3f3; }
+  .chip.warn { color:var(--red); border-color:#e6b9b9; background:#fbecec; }
+  .muted { color:var(--muted); }
+  .detail { background:var(--card); border:1px solid var(--line); border-radius:6px; padding:14px; position:sticky; top:10px; }
+  .detail h2 { font-size:16px; margin:0 0 6px; }
+  .detail h3 { font-size:13px; margin:14px 0 6px; color:var(--muted); text-transform:uppercase; letter-spacing:.03em; }
+  .kv { display:grid; grid-template-columns: 130px 1fr; gap:4px 10px; font-size:13px; }
+  .kv div:nth-child(odd) { color:var(--muted); }
+  .math { background:#f7f7f4; border-radius:4px; padding:8px 10px; font-variant-numeric:tabular-nums; }
+  .math div { display:flex; justify-content:space-between; }
+  .math .tot { font-weight:700; border-top:1px solid #ddd; margin-top:4px; padding-top:4px; }
+  .foot { margin-top:18px; font-size:12px; color:var(--muted); max-width:1100px; }
+  a { color:var(--blue); }
+  .empty { padding:30px; text-align:center; color:var(--muted); }
+  .links a { margin-right:10px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Simmons &amp; Harris | Historic Redevelopment Pipeline</h1>
+  <span class="sub">Buildings on, or eligible for, the National Register that are shaped for mixed-use or multifamily redevelopment. Houses removed.</span>
+  <span id="datastatus" class="badge">Loading NC HPO data…</span>
+</header>
+<nav class="tabs">
+  <button class="on" data-tab="nc">North Carolina</button>
+  <button data-tab="us">National (NPS register)</button>
+</nav>
+<main>
+
+<!-- ===================== NC PANEL ===================== -->
+<section id="nc" class="panel on">
+  <div class="filters">
+    <label>County <select id="f-county"><option value="">All of North Carolina</option></select></label>
+    <label>Eligibility
+      <select id="f-elig">
+        <option value="both">Listed now + eligible to nominate</option>
+        <option value="listed">Listed now only</option>
+        <option value="eligible">Eligible to nominate only</option>
+        <option value="all">Include "in district, confirm"</option>
+      </select>
+    </label>
+    <label>Building type
+      <select id="f-type">
+        <option value="">All redevelopment types</option>
+        <option>Mill</option><option>Warehouse</option><option>Factory / Industrial</option><option>Depot</option><option>Utility</option><option>Commercial</option><option>School</option><option>Other</option>
+      </select>
+    </label>
+    <label>Min stories <select id="f-stories"><option value="0">Any</option><option value="2" selected>2+</option><option value="3">3+</option><option value="4">4+</option></select></label>
+    <label>Name / description contains <input id="f-text" placeholder="e.g. tobacco, cotton, depot"></label>
+    <label class="chk"><input type="checkbox" id="f-mill"> Mill-credit candidates only</label>
+    <label class="chk"><input type="checkbox" id="f-tier"> Tier 1 / 2 counties only</label>
+    <label class="assump">Assumed sq ft <input id="a-sqft" type="number" value="10000" step="1000"></label>
+    <label class="assump">Rehab $/sq ft <input id="a-rehab" type="number" value="200" step="10"></label>
+    <label class="assump">Federal credit % <input id="a-fed" type="number" value="20" step="1"></label>
+    <label class="assump">NC state credit % <input id="a-state" type="number" value="20" step="1"></label>
+    <label class="assump">NC mill credit % <input id="a-mill" type="number" value="20" step="1"></label>
+  </div>
+  <div class="bar">
+    <div class="summary" id="nc-summary">—</div>
+    <div>
+      <button class="act" id="nc-refresh">Refresh from live NC HPO</button>
+      <button class="act" id="nc-csv">Export CSV</button>
+    </div>
+  </div>
+  <div class="layout">
+    <div class="tablewrap">
+      <table id="nc-table">
+        <thead><tr>
+          <th data-k="rank">#</th>
+          <th data-k="name">Building</th>
+          <th data-k="loc">Location</th>
+          <th data-k="county">County</th>
+          <th data-k="tier">Eligibility</th>
+          <th data-k="type">Type</th>
+          <th data-k="stories">Stories</th>
+          <th data-k="mill">Mill credit</th>
+          <th data-k="credits" class="num">Est. credits</th>
+          <th data-k="persf" class="num">$/sq ft</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+      <div id="nc-empty" class="empty" hidden>No buildings match. Loosen a filter.</div>
+    </div>
+    <aside class="detail" id="nc-detail"><div class="muted">Click a row to see the record, credit math, and parcel owner lookup.</div></aside>
+  </div>
+</section>
+
+<!-- ===================== NATIONAL PANEL ===================== -->
+<section id="us" class="panel">
+  <div class="filters">
+    <label>State <select id="u-state"></select></label>
+    <label>City <input id="u-city" placeholder="e.g. Cleveland"></label>
+    <label>Name contains <input id="u-text" placeholder="optional, e.g. warehouse"></label>
+    <label class="chk"><input type="checkbox" id="u-indonly" checked> Redevelopment types only (mills, warehouses, factories, depots, blocks)</label>
+    <label class="assump">Assumed sq ft <input id="u-sqft" type="number" value="10000" step="1000"></label>
+    <label class="assump">Rehab $/sq ft <input id="u-rehab" type="number" value="200" step="10"></label>
+    <label class="assump">Federal credit % <input id="u-fed" type="number" value="20" step="1"></label>
+    <label class="assump">State credit % (varies 0–25) <input id="u-statepct" type="number" value="0" step="5"></label>
+  </div>
+  <div class="bar">
+    <div class="summary" id="us-summary">Pick a state and city, then search. Source: National Park Service, National Register of Historic Places.</div>
+    <div>
+      <button class="act" id="us-search">Search NPS register</button>
+      <button class="act" id="us-csv">Export CSV</button>
+    </div>
+  </div>
+  <div class="layout">
+    <div class="tablewrap">
+      <table id="us-table">
+        <thead><tr>
+          <th>#</th><th>Building</th><th>Address</th><th>City</th><th>County</th><th>Type</th><th>Listed</th><th>Contrib. bldgs</th><th class="num">Est. credits</th><th>Nomination</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+      <div id="us-empty" class="empty" hidden>No results yet.</div>
+    </div>
+    <aside class="detail" id="us-detail"><div class="muted">National view uses the federal register only. It has no building descriptions, so open the nomination scan to check floor plates. Federal credit is 20% of qualified rehab spend; state credits vary by state.</div></aside>
+  </div>
+</section>
+
+<div class="foot">
+  <b>How eligibility is decided.</b> "Listed now" = individually listed on the National Register, or a contributing building inside a listed district. "Eligible, nominate" = on the NC Study List or Determined Eligible, meaning it can be put on the Register. Demolished, non-contributing, and survey-only records are excluded. Houses, farms, plantations, and churches are filtered out.
+  <br><b>Credit math.</b> Defaults are Benton's numbers. Statutes: federal IRC §47 (20% of QRE); NC Article 3L, G.S. 105-129.105 (15%/10% base, +5% Tier 1/2 county, +5% eligible targeted investment site, $4.5M cap); NC mill credit history, Article 3H, G.S. 105-129.70. Edit the percentages to match the deal. "Mill credit candidate" = description indicates a former mill, manufacturing, or utility use.
+  <br><b>Sources.</b> NC State Historic Preservation Office GIS (live), NC OneMap parcels (live, on click), NPS National Register (live). Square footage and vacancy are not in these databases; stories are parsed from the HPO description and parcel values are shown as vacancy signals.
+</div>
+</main>
+
+<script>
+// ---------- county tiers (2026) ----------
+const TIERS = {"Alamance":2,"Alexander":1,"Alleghany":2,"Anson":1,"Ashe":2,"Avery":2,"Beaufort":2,"Bertie":1,"Bladen":1,"Brunswick":3,"Buncombe":2,"Burke":1,"Cabarrus":3,"Caldwell":1,"Camden":3,"Carteret":3,"Caswell":1,"Catawba":2,"Chatham":3,"Cherokee":2,"Chowan":2,"Clay":2,"Cleveland":1,"Columbus":1,"Craven":2,"Cumberland":1,"Currituck":3,"Dare":2,"Davidson":2,"Davie":3,"Duplin":2,"Durham":3,"Edgecombe":1,"Forsyth":2,"Franklin":2,"Gaston":2,"Gates":2,"Graham":2,"Granville":2,"Greene":1,"Guilford":2,"Halifax":1,"Harnett":2,"Haywood":2,"Henderson":2,"Hertford":1,"Hoke":1,"Hyde":1,"Iredell":3,"Jackson":2,"Johnston":3,"Jones":1,"Lee":2,"Lenoir":1,"Lincoln":3,"Macon":3,"Madison":1,"Martin":1,"McDowell":1,"Mecklenburg":3,"Mitchell":1,"Montgomery":2,"Moore":3,"Nash":1,"New Hanover":3,"Northampton":1,"Onslow":2,"Orange":3,"Pamlico":2,"Pasquotank":1,"Pender":3,"Perquimans":2,"Person":2,"Pitt":1,"Polk":2,"Randolph":2,"Richmond":1,"Robeson":1,"Rockingham":1,"Rowan":2,"Rutherford":1,"Sampson":1,"Scotland":1,"Stanly":3,"Stokes":2,"Surry":2,"Swain":2,"Transylvania":2,"Tyrrell":1,"Union":3,"Vance":1,"Wake":3,"Warren":1,"Washington":1,"Watauga":2,"Wayne":1,"Wilkes":1,"Wilson":1,"Yadkin":2,"Yancey":1};
+function tierOf(c){ if(!c) return 3; const k=c.split('/')[0].trim(); return TIERS[k]||3; }
+
+// ---------- classification ----------
+const HOUSE_RE = /(?<!ware)(?<!power)(?<!store)(?<!school)(?<!court)(?<!smoke)(?<!ice)(?<!engine)house|residence|dwelling|\bfarm\b|plantation|chapel|church|cemetery|grist ?mill|gristmill|mill ?pond|\bdam\b/i;
+function typeOf(name, desc){
+  const t=(name+' '+desc).toLowerCase();
+  if(/textile|hosiery|cotton mill|knitting|spinning|weav|\bmill\b|mills\b/.test(t) && !/grist|saw ?mill/.test(t)) return 'Mill';
+  if(/warehouse|storage|prizery|prize house/.test(t)) return 'Warehouse';
+  if(/factory|plant\b|manufactur|foundry|industrial|works\b|cannery|bottling|machine shop|ice plant/.test(t)) return 'Factory / Industrial';
+  if(/depot|station|freight|railroad|railway/.test(t)) return 'Depot';
+  if(/power|electric|waterworks|water works|utility|gas works|pump/.test(t)) return 'Utility';
+  if(/school|academy|college/.test(t)) return 'School';
+  if(/commercial|store|hotel|bank|office|block|building|mercantile|garage|dealership|theater|theatre|armory|arcade/.test(t)) return 'Commercial';
+  return 'Other';
+}
+function millFlag(type, name, desc){
+  if(type==='Mill'||type==='Factory / Industrial'||type==='Utility') return true;
+  return /tobacco (factory|processing|plant)|manufactur|foundry|power plant|electric/i.test(name+' '+desc);
+}
+function storiesOf(desc){
+  if(!desc) return null;
+  let m, best=null; const re=/(\d+)(?:\s*(?:1\/2|½))?\s*-?\s*(?:and\s*\d+\s*-?\s*)?stor/gi;
+  while((m=re.exec(desc))){ const n=parseInt(m[1],10)+((/1\/2|½/.test(m[0]))?0.5:0); if(best===null||n>best) best=n; }
+  return best;
+}
+function eligOf(r){
+  const s=r.Status||'', hd=r.HDstatus||'', cnc=(r.CNCstatus||'').trim(), nm=r.Site_Name||'';
+  if(/\(gone\)/i.test(nm)) return null;
+  if(['NRD','SLD','SD','DOED'].includes(s) || cnc==='D' || cnc==='N') return null;
+  if(s==='NR' || (hd==='NRHD' && cnc==='C')) return 'listed';
+  if(['SL','DOE','SLDOE','SLHD','DOEHD'].includes(s)) return 'eligible';
+  if(hd==='NRHD' && cnc==='') return 'confirm';
+  return null;
+}
+function enrich(rows){
+  const out=[];
+  for(const r of rows){
+    const name=r.Site_Name||'', desc=r.Descriptio||'';
+    if(HOUSE_RE.test(name) || (HOUSE_RE.test(desc) && !/warehouse|factory|mill|depot|plant|store|commercial/i.test(desc+name))) continue;
+    const elig=eligOf(r); if(!elig) continue;
+    const type=typeOf(name,desc);
+    out.push({...r, name, desc, elig, type, stories:storiesOf(desc), mill:millFlag(type,name,desc), tier:tierOf(r.County),
+      year:r.YearNR||r.YearSL||r.YearDOE||'', loc:r.Location||''});
+  }
+  return out;
+}
+
+// ---------- NC data ----------
+const HPO='https://services3.arcgis.com/OYP7N6mAJJCyH6hd/arcgis/rest/services/North_Carolina_State_Historic_Preservation_Office_GIS_Data/FeatureServer/1/query';
+const KW=["MILL","WAREHOUSE","FACTORY","PLANT","DEPOT","TOBACCO","COTTON","INDUSTRIAL","MANUFACTUR","FOUNDRY","HOSIERY","TEXTILE","COMMERCIAL","STORE","HOTEL","BANK","SCHOOL"];
+function ncWhere(){
+  const d=KW.map(k=>`UPPER(Descriptio) LIKE '%${k}%'`), n=["MILL","WAREHOUSE","FACTORY","PLANT","DEPOT"].map(k=>`UPPER(Site_Name) LIKE '%${k}%'`);
+  return `(${d.concat(n).join(' OR ')}) AND (Status IN ('NR','SL','DOE','SLDOE','SLHD') OR (HDstatus='NRHD' AND CNCstatus='C')) AND NOT (UPPER(Site_Name) LIKE '%HOUSE' OR UPPER(Site_Name) LIKE '%HOUSE %' OR UPPER(Site_Name) LIKE '%RESIDENCE%' OR UPPER(Site_Name) LIKE '%DWELLING%' OR UPPER(Site_Name) LIKE '%FARM%' OR UPPER(Site_Name) LIKE '%(GONE)%')`;
+}
+const FIELDS='Site_ID,Site_Name,Status,HDstatus,CNCstatus,YearNR,YearSL,YearDOE,Descriptio,Location,County,Latitude,Longitude,GISlink';
+async function fetchLiveNC(){
+  let off=0, rows=[];
+  for(let i=0;i<6;i++){
+    const p=new URLSearchParams({where:ncWhere(), outFields:FIELDS, returnGeometry:'false', resultOffset:off, resultRecordCount:2000, f:'json'});
+    const ctl=new AbortController(); const t=setTimeout(()=>ctl.abort(),12000);
+    const res=await fetch(HPO+'?'+p, {signal:ctl.signal}); clearTimeout(t);
+    const d=await res.json(); if(d.error) throw new Error(d.error.message);
+    const fs=(d.features||[]).map(f=>f.attributes); rows=rows.concat(fs);
+    if(!d.exceededTransferLimit || !fs.length) break; off+=fs.length;
+  }
+  return rows;
+}
+let NC=[], NCVIEW=[], ncSel=null, ncSort={k:'rank',dir:1};
+const $=s=>document.querySelector(s);
+function setStatus(txt, cls){ const b=$('#datastatus'); b.textContent=txt; b.className='badge '+(cls||''); }
+async function loadNC(preferLive){
+  let rows=null;
+  if(preferLive){
+    try{ setStatus('Querying NC HPO live…'); rows=await fetchLiveNC(); setStatus(`Live: NC State Historic Preservation Office · ${rows.length.toLocaleString()} raw records`, 'live'); }
+    catch(e){ console.warn('live failed',e); }
+  }
+  if(!rows){
+    try{ rows=await (await fetch('data/nc_candidates.json')).json(); setStatus(`Snapshot: NC HPO, pulled Sept 9 2026 · ${rows.length.toLocaleString()} raw records`, 'snap'); }
+    catch(e){ setStatus('Could not load data', 'snap'); rows=[]; }
+  }
+  NC=enrich(rows);
+  const counties=[...new Set(NC.map(r=>r.County).filter(Boolean))].sort();
+  const sel=$('#f-county'); sel.innerHTML='<option value="">All of North Carolina</option>'+counties.map(c=>`<option>${c}</option>`).join('');
+  renderNC();
+}
+function assumptions(){ return { sqft:+$('#a-sqft').value||0, rehab:+$('#a-rehab').value||0, fed:+$('#a-fed').value||0, state:+$('#a-state').value||0, mill:+$('#a-mill').value||0 }; }
+function creditsFor(r, a){
+  const qre=a.sqft*a.rehab; const pct=a.fed+a.state+(r.mill?a.mill:0);
+  return { qre, pct, total:qre*pct/100, persf:a.rehab*pct/100, fed:qre*a.fed/100, st:qre*a.state/100, ml:r.mill?qre*a.mill/100:0 };
+}
+const money=n=>'$'+Math.round(n).toLocaleString();
+function eligChip(e){ return e==='listed'?'<span class="chip listed">Listed now</span>':e==='eligible'?'<span class="chip eligible">Eligible, nominate</span>':'<span class="chip confirm">In district, confirm</span>'; }
+function tierChip(t){ return `<span class="chip t${t}">Tier ${t}</span>`; }
+function renderNC(){
+  const a=assumptions();
+  const county=$('#f-county').value, elig=$('#f-elig').value, type=$('#f-type').value, minSt=+$('#f-stories').value, txt=$('#f-text').value.trim().toLowerCase();
+  const millOnly=$('#f-mill').checked, tierOnly=$('#f-tier').checked;
+  let v=NC.filter(r=>{
+    if(county && r.County!==county) return false;
+    if(elig==='listed' && r.elig!=='listed') return false;
+    if(elig==='eligible' && r.elig!=='eligible') return false;
+    if(elig==='both' && r.elig==='confirm') return false;
+    if(type && r.type!==type) return false;
+    if(minSt && !(r.stories>=minSt)) return false;
+    if(txt && !(r.name+' '+r.desc+' '+r.loc).toLowerCase().includes(txt)) return false;
+    if(millOnly && !r.mill) return false;
+    if(tierOnly && r.tier===3) return false;
+    return true;
+  });
+  v.forEach(r=>{ const c=creditsFor(r,a); r.credits=c.total; r.persf=c.persf; });
+  // default rank: mill first, listed before eligible, stories desc, tier asc
+  v.sort((x,y)=>(y.mill-x.mill)||((x.elig==='listed'?0:1)-(y.elig==='listed'?0:1))||((y.stories||0)-(x.stories||0))||(x.tier-y.tier)||x.name.localeCompare(y.name));
+  v.forEach((r,i)=>r.rank=i+1);
+  if(ncSort.k!=='rank'){ const k=ncSort.k; v.sort((x,y)=>{ const A=x[k]??'', B=y[k]??''; return (typeof A==='number'||typeof B==='number')?((+A||0)-(+B||0))*ncSort.dir:String(A).localeCompare(String(B))*ncSort.dir; }); }
+  NCVIEW=v;
+  const tot=v.reduce((s,r)=>s+r.credits,0);
+  $('#nc-summary').innerHTML=`<b>${v.length.toLocaleString()}</b> candidate buildings · <b>${money(tot)}</b> estimated credits at ${a.sqft.toLocaleString()} sq ft each · ${v.filter(r=>r.mill).length} mill-credit candidates · ${v.filter(r=>r.elig==='listed').length} listed now`;
+  const tb=$('#nc-table tbody'); tb.innerHTML=v.slice(0,600).map(r=>`<tr class="row ${ncSel===r.Site_ID?'sel':''}" data-id="${r.Site_ID}">
+    <td class="num">${r.rank}</td>
+    <td><b>${esc(r.name)}</b><div class="muted">${esc(r.year?r.year+' · ':'')}${esc(r.desc)}</div></td>
+    <td>${esc(r.loc)}</td>
+    <td>${esc(r.County||'')} ${tierChip(r.tier)}</td>
+    <td>${eligChip(r.elig)}</td>
+    <td>${r.type}</td>
+    <td class="num">${r.stories??'<span class="muted">?</span>'}</td>
+    <td>${r.mill?'<span class="chip mill">Mill credit</span>':''}</td>
+    <td class="num">${money(r.credits)}</td>
+    <td class="num">${money(r.persf)}</td></tr>`).join('');
+  $('#nc-empty').hidden=v.length>0;
+  if(v.length>600) tb.insertAdjacentHTML('beforeend',`<tr><td colspan="10" class="muted">Showing first 600 of ${v.length}. Narrow the filters or export CSV for all.</td></tr>`);
+}
+function esc(s){ return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+// ---------- detail + parcel ----------
+const PARCELS='https://services.nconemap.gov/secure/rest/services/NC1Map_Parcels/FeatureServer/1/query';
+async function parcelsNear(lat,lon,dist){
+  const p=new URLSearchParams({geometry:`${lon},${lat}`, geometryType:'esriGeometryPoint', inSR:'4326', distance:dist, units:'esriSRUnit_Meter', spatialRel:'esriSpatialRelIntersects',
+    outFields:'parno,siteadd,ownname,ownname2,mailadd,mcity,mstate,parval,landval,improvval,parusedesc,structyear,gisacres,saledate,cntyname', returnGeometry:'false', resultRecordCount:'4', f:'json'});
+  const d=await (await fetch(PARCELS+'?'+p)).json(); if(d.error) throw new Error(d.error.message);
+  return (d.features||[]).map(f=>f.attributes);
+}
+function signals(p){
+  const out=[]; const site=(p.siteadd||'').replace(/\s+/g,' ').trim().toUpperCase(), mail=(p.mailadd||'').replace(/\s+/g,' ').trim().toUpperCase();
+  if(site && mail && !mail.startsWith(site.split(' ')[0]+' ') ) out.push('<span class="chip warn">Absentee owner</span>');
+  if((p.landval||0)>0 && (p.improvval||0) < 0.5*(p.landval||0)) out.push('<span class="chip warn">Low improvement value</span>');
+  if(p.saledate){ const y=new Date(p.saledate).getFullYear(); if(y && (2026-y)>=15) out.push(`<span class="chip warn">No sale since ${y}</span>`); }
+  if(/LLC|ESTATE|HEIRS|TRUST/i.test(p.ownname||'')) out.push('<span class="chip confirm">Entity / estate owner</span>');
+  return out.join(' ')||'<span class="muted">No flags</span>';
+}
+async function showNCDetail(id){
+  const r=NC.find(x=>x.Site_ID===id); if(!r) return; ncSel=id; renderNC();
+  const a=assumptions(), c=creditsFor(r,a);
+  const gm=`https://www.google.com/maps/search/?api=1&query=${r.Latitude},${r.Longitude}`;
+  $('#nc-detail').innerHTML=`<h2>${esc(r.name)}</h2>
+    <div>${eligChip(r.elig)} ${r.mill?'<span class="chip mill">Mill credit candidate</span>':''} ${tierChip(r.tier)}</div>
+    <div class="kv" style="margin-top:8px">
+      <div>Description</div><div>${esc(r.desc)||'<span class="muted">none</span>'}</div>
+      <div>Location</div><div>${esc(r.loc)}</div>
+      <div>County</div><div>${esc(r.County||'')}</div>
+      <div>HPO status</div><div>${esc(r.Status)}${r.HDstatus==='NRHD'?' · in NR district'+(r.CNCstatus==='C'?' (contributing)':''):''}</div>
+      <div>Year</div><div>${r.YearNR?'Listed '+r.YearNR:''}${r.YearSL?' Study List '+r.YearSL:''}${r.YearDOE?' DOE '+r.YearDOE:''}</div>
+      <div>Site ID</div><div>${esc(r.Site_ID)}</div>
+    </div>
+    <div class="links" style="margin-top:8px">${r.GISlink?`<a target="_blank" href="${esc(r.GISlink)}">HPOWEB record</a>`:''}<a target="_blank" href="${gm}">Google Maps</a></div>
+    <h3>Credit math</h3>
+    <div class="math">
+      <div><span>QRE (${a.sqft.toLocaleString()} sq ft × $${a.rehab}/sf)</span><span>${money(c.qre)}</span></div>
+      <div><span>Federal ${a.fed}%</span><span>${money(c.fed)}</span></div>
+      <div><span>NC state ${a.state}%</span><span>${money(c.st)}</span></div>
+      <div><span>NC mill credit ${r.mill?a.mill+'%':'n/a'}</span><span>${money(c.ml)}</span></div>
+      <div class="tot"><span>Total credits (${c.pct}% of QRE)</span><span>${money(c.total)}</span></div>
+      <div><span>Monetized at 80¢</span><span>${money(c.total*0.8)}</span></div>
+      <div><span>Per sq ft back</span><span>${money(c.persf)}</span></div>
+    </div>
+    <h3>Parcel owner &amp; vacancy signals</h3>
+    <div id="parcel"><span class="muted">Looking up NC OneMap parcels…</span></div>`;
+  try{
+    let ps=await parcelsNear(r.Latitude,r.Longitude,25); if(!ps.length) ps=await parcelsNear(r.Latitude,r.Longitude,80);
+    $('#parcel').innerHTML = ps.length? ps.map(p=>`<div style="margin-bottom:10px">
+      <div><b>${esc(p.ownname||'Unknown owner')}</b>${p.ownname2?' / '+esc(p.ownname2):''}</div>
+      <div class="kv">
+        <div>Site</div><div>${esc(p.siteadd||'')}</div>
+        <div>Mailing</div><div>${esc(p.mailadd||'')}${p.mcity?', '+esc(p.mcity)+' '+esc(p.mstate||''):''}</div>
+        <div>Use</div><div>${esc(p.parusedesc||'')}</div>
+        <div>Values</div><div>Total ${money(p.parval||0)} · land ${money(p.landval||0)} · improvements ${money(p.improvval||0)}</div>
+        <div>Acres / built</div><div>${p.gisacres?(+p.gisacres).toFixed(2):'?'} ac · ${p.structyear||'?'}</div>
+        <div>Last sale</div><div>${p.saledate?new Date(p.saledate).toISOString().slice(0,10):'unknown'}</div>
+        <div>Signals</div><div>${signals(p)}</div>
+      </div></div>`).join('') : '<span class="muted">No parcel within 80 m of the HPO point. Open HPOWEB to locate it.</span>';
+  }catch(e){ $('#parcel').innerHTML='<span class="muted">Parcel service unavailable right now.</span>'; }
+}
+
+// ---------- CSV ----------
+function toCSV(rows, cols){
+  const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+  return [cols.map(c=>q(c.h)).join(',')].concat(rows.map(r=>cols.map(c=>q(typeof c.k==='function'?c.k(r):r[c.k])).join(','))).join('\n');
+}
+function download(name, text){ const b=new Blob([text],{type:'text/csv'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=name; a.click(); }
+
+// ---------- National (NPS) ----------
+const NPS='https://mapservices.nps.gov/arcgis/rest/services/cultural_resources/nrhp_locations/MapServer/0/query';
+const STATES={AL:"ALABAMA",AK:"ALASKA",AZ:"ARIZONA",AR:"ARKANSAS",CA:"CALIFORNIA",CO:"COLORADO",CT:"CONNECTICUT",DE:"DELAWARE",DC:"DISTRICT OF COLUMBIA",FL:"FLORIDA",GA:"GEORGIA",HI:"HAWAII",ID:"IDAHO",IL:"ILLINOIS",IN:"INDIANA",IA:"IOWA",KS:"KANSAS",KY:"KENTUCKY",LA:"LOUISIANA",ME:"MAINE",MD:"MARYLAND",MA:"MASSACHUSETTS",MI:"MICHIGAN",MN:"MINNESOTA",MS:"MISSISSIPPI",MO:"MISSOURI",MT:"MONTANA",NE:"NEBRASKA",NV:"NEVADA",NH:"NEW HAMPSHIRE",NJ:"NEW JERSEY",NM:"NEW MEXICO",NY:"NEW YORK",NC:"NORTH CAROLINA",ND:"NORTH DAKOTA",OH:"OHIO",OK:"OKLAHOMA",OR:"OREGON",PA:"PENNSYLVANIA",RI:"RHODE ISLAND",SC:"SOUTH CAROLINA",SD:"SOUTH DAKOTA",TN:"TENNESSEE",TX:"TEXAS",UT:"UTAH",VT:"VERMONT",VA:"VIRGINIA",WA:"WASHINGTON",WV:"WEST VIRGINIA",WI:"WISCONSIN",WY:"WYOMING"};
+const US_IND=/warehouse|mill|factory|works\b|foundry|depot|plant\b|block\b|building|company|manufactur|brewery|cannery|freight|terminal|storage|industrial|hotel|bank|school|garage|armory/i;
+let USVIEW=[];
+function usType(n){ return typeOf(n,''); }
+async function searchUS(){
+  const st=$('#u-state').value, city=$('#u-city').value.trim(), txt=$('#u-text').value.trim(), indOnly=$('#u-indonly').checked;
+  if(!st){ $('#us-summary').textContent='Pick a state.'; return; }
+  $('#us-summary').textContent='Querying NPS…';
+  let where=`UPPER(State)='${STATES[st]}' AND ResType='building'`;
+  if(city) where+=` AND UPPER(City) LIKE '${city.toUpperCase().replace(/'/g,"''")}%'`;
+  if(txt) where+=` AND UPPER(RESNAME) LIKE '%${txt.toUpperCase().replace(/'/g,"''")}%'`;
+  const p=new URLSearchParams({where, outFields:'NRIS_Refnum,RESNAME,ResType,Address,City,County,State,NumCBldg,IS_EXTANT,STATUS,CertDate,NARA_URL', returnGeometry:'true', outSR:'4326', resultRecordCount:'2000', f:'json'});
+  let rows=[];
+  try{ const d=await (await fetch(NPS+'?'+p)).json(); if(d.error) throw new Error(d.error.message); rows=(d.features||[]).map(f=>({...f.attributes, lat:f.geometry?.y, lon:f.geometry?.x})); }
+  catch(e){ $('#us-summary').textContent='NPS service error: '+e.message; return; }
+  rows=rows.filter(r=>!HOUSE_RE.test(r.RESNAME||'') && (!indOnly || US_IND.test(r.RESNAME||'')));
+  const a={sqft:+$('#u-sqft').value||0, rehab:+$('#u-rehab').value||0, fed:+$('#u-fed').value||0, st:+$('#u-statepct').value||0};
+  rows.forEach(r=>{ r.type=usType(r.RESNAME||''); r.mill=millFlag(r.type,r.RESNAME||'',''); r.credits=a.sqft*a.rehab*(a.fed+a.st)/100; });
+  rows.sort((x,y)=>(y.mill-x.mill)||((y.NumCBldg||0)-(x.NumCBldg||0))||String(x.RESNAME).localeCompare(String(y.RESNAME)));
+  USVIEW=rows;
+  $('#us-summary').innerHTML=`<b>${rows.length}</b> listed buildings in ${city?esc(city)+', ':''}${STATES[st]} matching redevelopment types · ${rows.filter(r=>r.mill).length} former mill / industrial · federal credit ${money(a.sqft*a.rehab*a.fed/100)} each at ${a.sqft.toLocaleString()} sq ft${a.st?` (+${a.st}% state)`:''}`;
+  $('#us-table tbody').innerHTML=rows.slice(0,600).map((r,i)=>`<tr>
+    <td class="num">${i+1}</td><td><b>${esc(r.RESNAME)}</b> ${r.mill?'<span class="chip mill">Mill / industrial</span>':''}</td>
+    <td>${esc(r.Address||'')}</td><td>${esc(r.City||'')}</td><td>${esc(r.County||'')}</td><td>${r.type}</td>
+    <td>${esc(r.CertDate||'')}</td><td class="num">${r.NumCBldg??''}</td><td class="num">${money(r.credits)}</td>
+    <td>${r.NARA_URL?`<a target="_blank" href="${esc(r.NARA_URL)}">Open</a>`:''} ${r.lat?`<a target="_blank" href="https://www.google.com/maps/search/?api=1&query=${r.lat},${r.lon}">Map</a>`:''}</td></tr>`).join('');
+  $('#us-empty').hidden=rows.length>0;
+}
+
+// ---------- wiring ----------
+document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>{ document.querySelectorAll('nav.tabs button').forEach(x=>x.classList.toggle('on',x===b)); document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on',p.id===b.dataset.tab)); });
+['#f-county','#f-elig','#f-type','#f-stories','#f-mill','#f-tier','#a-sqft','#a-rehab','#a-fed','#a-state','#a-mill'].forEach(s=>$(s).addEventListener('change',()=>{ renderNC(); if(ncSel) showNCDetail(ncSel); }));
+$('#f-text').addEventListener('input',renderNC);
+$('#nc-table tbody').addEventListener('click',e=>{ const tr=e.target.closest('tr.row'); if(tr) showNCDetail(tr.dataset.id); });
+$('#nc-table thead').addEventListener('click',e=>{ const th=e.target.closest('th'); if(!th) return; const k=th.dataset.k; ncSort = (ncSort.k===k)? {k, dir:-ncSort.dir} : {k, dir:1}; renderNC(); });
+$('#nc-refresh').onclick=()=>loadNC(true);
+$('#nc-csv').onclick=()=>download('nc_historic_pipeline.csv', toCSV(NCVIEW,[{h:'Rank',k:'rank'},{h:'Building',k:'name'},{h:'Description',k:'desc'},{h:'Location',k:'loc'},{h:'County',k:'County'},{h:'County tier',k:'tier'},{h:'Eligibility',k:'elig'},{h:'HPO status',k:'Status'},{h:'Type',k:'type'},{h:'Stories',k:'stories'},{h:'Mill credit candidate',k:r=>r.mill?'yes':'no'},{h:'Est credits',k:r=>Math.round(r.credits)},{h:'Credits per sf',k:'persf'},{h:'Year',k:'year'},{h:'Lat',k:'Latitude'},{h:'Lon',k:'Longitude'},{h:'HPOWEB',k:'GISlink'},{h:'Site ID',k:'Site_ID'}]));
+$('#u-state').innerHTML='<option value="">Select state</option>'+Object.entries(STATES).map(([k,v])=>`<option value="${k}" ${k==='OH'?'selected':''}>${v.charAt(0)+v.slice(1).toLowerCase()}</option>`).join('');
+$('#u-city').value='Cleveland';
+$('#us-search').onclick=searchUS;
+$('#u-city').addEventListener('keydown',e=>{ if(e.key==='Enter') searchUS(); });
+$('#us-csv').onclick=()=>download('nps_pipeline.csv', toCSV(USVIEW,[{h:'Building',k:'RESNAME'},{h:'Address',k:'Address'},{h:'City',k:'City'},{h:'County',k:'County'},{h:'State',k:'State'},{h:'Type',k:'type'},{h:'Listed',k:'CertDate'},{h:'Contributing buildings',k:'NumCBldg'},{h:'Est federal credits',k:r=>Math.round(r.credits)},{h:'NRIS',k:'NRIS_Refnum'},{h:'Nomination',k:'NARA_URL'},{h:'Lat',k:'lat'},{h:'Lon',k:'lon'}]));
+loadNC(true);
+</script>
+</body>
+</html>
