@@ -170,7 +170,7 @@
 
 <div class="foot">
   <b>How eligibility is decided.</b> "Listed now" = individually listed on the National Register, or a contributing building inside a listed district. "Eligible, nominate" = on the NC Study List or Determined Eligible, meaning it can be put on the Register. Demolished, non-contributing, and survey-only records are excluded. Houses, farms, plantations, and churches are filtered out.
-  <br><b>Already redeveloped.</b> A building is removed from the pipeline (toggle "Show already redeveloped" to see them) when any of these is true: NC HPO has an income-producing tax credit application on file for it (completed or in progress), a web check found redevelopment or demolition coverage, or the county tax improvement value is $60+ per sq ft of county-recorded building area. A building with $2M+ in improvements but no square footage is kept and flagged "verify."
+  <br><b>Already redeveloped.</b> A building is removed from the pipeline (toggle "Show already redeveloped" to see them) when any of these is true: NC HPO has an income-producing tax credit application on file for it (completed or in progress), a web check found redevelopment or demolition coverage, or the county tax improvement value is $100+ per sq ft of county-recorded building area (buildings with a credit on file assess at a median $125/sf; untouched ones at $58/sf). A building with $2M+ in improvements but no square footage is kept and flagged "verify."
   <br><b>Credit math.</b> Defaults are Benton's numbers. Statutes: federal IRC §47 (20% of QRE); NC Article 3L, G.S. 105-129.105 (15%/10% base, +5% Tier 1/2 county, +5% eligible targeted investment site, $4.5M cap); NC mill credit history, Article 3H, G.S. 105-129.70. Edit the percentages to match the deal. "Mill credit candidate" = description indicates a former mill, manufacturing, or utility use.
   <br><b>Sources.</b> NC State Historic Preservation Office GIS (live), NC OneMap parcels (live, on click), NPS National Register (live). Building square footage comes from each county's own GIS tax parcel service where one is published: Nash, Wilson, Wake, Durham, Mecklenburg, Gaston, Forsyth, and Buncombe so far. Edgecombe and Guilford do not publish commercial square footage in any API, so those rows fall back to the assumed sq ft. Vacancy is not in any database; parcel values, owner mailing address, and sale history are shown as signals.
 </div>
@@ -218,7 +218,8 @@ function redevOf(x){
   if(x.ita){ const i=x.ita; return {kind:'credited', label:`Credit ${i.status==='completed'?'used':'in progress'} ${i.year_in||''}${i.year_out?'–'+i.year_out:''}`.trim()}; }
   if(x.web&&x.web.verdict==='redeveloped') return {kind:'news', label:`Redeveloped${x.web.year?' '+x.web.year:''} (news)`};
   if(x.web&&x.web.verdict==='demolished') return {kind:'gone', label:'Demolished (news)'};
-  if(x.sqft&&x.sqft.value&&x.parcel&&x.parcel.improv&&x.parcel.improv/x.sqft.value>=60) return {kind:'value', label:`Tax value $${Math.round(x.parcel.improv/x.sqft.value)}/sf`};
+  const imp=(x.sqft&&x.sqft.improv)||(x.parcel&&x.parcel.improv)||0;
+  if(x.sqft&&x.sqft.value&&imp&&imp/x.sqft.value>=100) return {kind:'value', label:`Tax value $${Math.round(imp/x.sqft.value)}/sf`};
   if(x.parcel&&(x.parcel.improv||0)>=2000000) return {kind:'maybe', label:'High tax value, verify'};
   return null;
 }
@@ -328,7 +329,7 @@ function renderNC(){
     <td class="num">${r.stories??'<span class="muted">?</span>'}</td>
     <td>${r.mill?'<span class="chip mill">Mill credit</span>':''}</td>
     <td class="num">${r.sqft&&r.sqft.value?r.sqft.value.toLocaleString():'<span class="muted">?</span>'}</td>
-    <td class="num">${r.parcel&&r.parcel.improv!=null?money(r.parcel.improv):'<span class="muted">?</span>'}</td>
+    <td class="num">${(()=>{const imp=(r.sqft&&r.sqft.improv)||(r.parcel&&r.parcel.improv); if(imp==null) return '<span class="muted">?</span>'; const psf=(r.sqft&&r.sqft.value)?` <span class="muted">$${Math.round(imp/r.sqft.value)}/sf</span>`:''; return money(imp)+psf;})()}</td>
     <td>${statusChip(r)}</td>
     <td class="num">${money(r.credits)}</td>
     <td class="num">${money(r.persf)}</td></tr>`).join('');
