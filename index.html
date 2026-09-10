@@ -185,7 +185,7 @@ function tierOf(c){ if(!c) return 3; let k=c.split('/')[0].trim(); k=COUNTY_ALIA
 // ---------- classification ----------
 const HOUSE_RE = /(?<!ware)(?<!power)(?<!store)(?<!school)(?<!court)(?<!smoke)(?<!ice)(?<!engine)house|residence|dwelling|\bfarm\b|plantation|chapel|church|cemetery|grist ?mill|gristmill|mill ?pond|\bdam\b/i;
 function typeOf(name, desc){
-  const t=(name+' '+desc).toLowerCase();
+  const t=(name+' '+desc).toLowerCase().replace(/standard commercial\/industrial|std comm\/indust|commercial\/industrial building|commercial\/industrial/g,'commercial-style');
   if(/textile|hosiery|cotton mill|knitting|spinning|weav|\bmill\b|mills\b/.test(t) && !/grist|saw ?mill/.test(t)) return 'Mill';
   if(/warehouse|storage|prizery|prize house/.test(t)) return 'Warehouse';
   if(/factory|plant\b|manufactur|foundry|industrial|works\b|cannery|bottling|machine shop|ice plant/.test(t)) return 'Factory / Industrial';
@@ -197,7 +197,8 @@ function typeOf(name, desc){
 }
 function millFlag(type, name, desc){
   if(type==='Mill'||type==='Factory / Industrial'||type==='Utility') return true;
-  return /tobacco (factory|processing|plant)|manufactur|foundry|power plant|electric/i.test(name+' '+desc);
+  const t=(name+' '+desc).replace(/commercial\/industrial/ig,'');
+  return /tobacco (factory|processing|plant)|manufactur|foundry|power plant|electric/i.test(t);
 }
 function storiesOf(desc){
   if(!desc) return null;
